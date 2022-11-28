@@ -12,22 +12,18 @@ public class Main {
         boolean playing = true;
 
         System.out.println("Bienvenido al juego del coche");
+        System.out.println("Selecciona la dificultad:");
+        System.out.println("1. Muy fácil (mapa visible y definido)");
+        System.out.println("2. Fácil (mapa visible y aleatorio)");
+        System.out.println("3. Media (mapa invisible y definido)");
+        System.out.println("4. Difícil (mapa invisible y aleatorio)");
+        service.setDifficulty(sc.next());
 
-        /* TODO: 2 Player
-
-        System.out.println("Selecciona el número de jugadores:");
-        System.out.println("1.- Un jugador");
-        System.out.println("2.- Dos jugadores");
-        int players = sc.nextInt();
-        if (players == 2) {
-            service.addPlayer();
-            service.randomize();
+        if (!service.generateMap()) {
+            System.out.println("Opción incorrecta");
+            return;
         }
-
-         */
-
-//        service.printMap();
-        service.printCloser();
+        service.print();
 
         while (playing) {
             System.out.println("Selecciona una dirección para avanzar (wasd):");

@@ -21,23 +21,19 @@ public class CarService {
 
     Map map;
     Car car;
-    Car car2;
+    private String difficulty;
 
     public CarService() {
         map = new Map();
         car = new Car(1);
-        car2 = new Car(2);
 
         // INITIALIZE
         car.setPosX(map.getMatrix()[0].length / 2);
         car.setPosY(map.getMatrix().length - 1);
+    }
 
-        /* TODO: 2 Player
-        car2.setPosX(-1);
-        car2.setPosY(-1);
-         */
-
-        randomize();
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
     }
 
     public boolean move(String direction) {
@@ -45,8 +41,7 @@ public class CarService {
             return false;
         }
 
-//        printMap();
-        printCloser();
+        print();
         return checkPosition();
     }
 
@@ -102,6 +97,33 @@ public class CarService {
         return true;
     }
 
+    public boolean generateMap() {
+        switch (difficulty) {
+            case "1":
+            case "3":
+                map.defineMap();
+                return true;
+            case "2":
+            case "4":
+                randomize();
+                return true;
+        }
+        return false;
+    }
+
+    public void print() {
+        switch (difficulty) {
+            case "1":
+            case "2":
+                printMap();
+                break;
+            case "3":
+            case "4":
+                printCloser();
+                break;
+        }
+    }
+
     // Shows the whole map
     public void printMap() {
         for (int i = 0; i < map.getMatrix().length; i++) {
@@ -109,8 +131,6 @@ public class CarService {
             for (int j = 0; j < map.getMatrix()[0].length; j++) {
                 if (car.getPosY() == i && car.getPosX() == j) {
                     System.out.print(ANSI_RED);
-                } else if (car2.getPosY() == i && car2.getPosX() == j) {
-                    System.out.print(ANSI_BLUE);
                 }
 
                 String position = StringUtils.rightPad(String.valueOf(map.getMatrix()[i][j]), 3);
@@ -153,16 +173,10 @@ public class CarService {
             int y = r.nextInt(9);
             if (map.getMatrix()[y][x] != 0
                     || (x == car.getPosX() && y == car.getPosY())) {
-//                    || (x == car2.getPosX() && y == car2.getPosY())) {
                 continue;
             }
             map.getMatrix()[y][x] = obstacle;
             limit--;
         }
-    }
-
-    public void addPlayer() {
-        car2.setPosX(map.getMatrix()[0].length / 2);
-        car2.setPosY(map.getMatrix().length - 1);
     }
 }
